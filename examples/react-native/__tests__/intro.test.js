@@ -57,3 +57,19 @@ it('renders the ListView component', () => {
     .toJSON();
   expect(tree).toMatchSnapshot();
 });
+
+it.only('works with socket.io', () => {
+  return new Promise(resolve => {
+    const io = require('socket.io')(3000);
+    io.on('connect', (socket) => {
+      socket.on('data', (...data) => {
+        console.log('got data from client:', data);
+        data.pop()();
+        io.close();
+        resolve();
+      });
+    });
+
+    const tree = renderer.create(<Intro />).toJSON();
+  });
+});

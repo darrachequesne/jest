@@ -6,6 +6,18 @@
 
 import React, {Component} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import Client from 'socket.io-client';
+
+const socket = new Client('http://localhost:3000', {
+  transports: ['polling']
+});
+
+socket.on('connect', () => {
+  console.log('connected!');
+  socket.emit('data', 1, '2', {}, '€€€', Int8Array.of(1,2,3), () => {
+    socket.disconnect();
+  });
+});
 
 const styles = StyleSheet.create({
   container: {
